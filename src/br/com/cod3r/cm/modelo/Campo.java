@@ -3,6 +3,8 @@ package br.com.cod3r.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.cod3r.cm.excecao.ExplosaoException;
+
 public class Campo {
 
 	private final int linha;
@@ -13,6 +15,7 @@ public class Campo {
 	private boolean marcado;
 	
 	private List<Campo> vizinhos = new ArrayList<>();
+	
 	
 	Campo(int linha, int coluna){
 		this.linha = linha;
@@ -37,6 +40,49 @@ public class Campo {
 		} else {
 			return false;
 		}
+	}
+	
+	void alternarMarcacao() { 
+		if(!aberto) { //se nao aberto
+			marcado = !marcado;// se estiver false retorna true, se estiver true retornar false
+		}
+	}
+	
+	boolean abrir() {
+		if(!aberto && !marcado) {
+			aberto = true;//abre se estiver nao aberto e nao marcado
+			
+			if(minado) { //explode se estiver minado
+				throw new ExplosaoException();
+			}
+			if(vizinhancaSegura()) { //se metodo vizinhança segura true
+				vizinhos.forEach(v -> v.abrir()); //abre todos vizinhos enquanto v segura
+			}
+			return true;
+		}else {
+			return false;			
+		}
+		
+	}
+
+	boolean vizinhancaSegura() { //abre os campos seguros
+		return vizinhos.stream().noneMatch(v -> v.minado); // expessao lambda onde se nenhum vizinho cair no predicado a vizinhança é segura(false retorna pelo menos uma mina, não segura) 
+	}
+
+	void minar() {
+		minado = true;	
+	}
+	
+	public boolean isMarcado() {//metodo get para boolean é is
+		return marcado;
+	}
+
+	public boolean isAberto() {//metodo get para boolean é is
+		return aberto;
+	}
+
+	public boolean isFechado() {
+		return !aberto;
 	}
 	
 	
