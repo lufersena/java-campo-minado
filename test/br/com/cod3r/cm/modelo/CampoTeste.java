@@ -132,4 +132,112 @@ class CampoTeste {
 		
 		assertTrue(campo22.isAberto() && campo11.isFechado());// espera um true (campo22 aberto(true)) e campo11 fechado
 	}
+	
+	@Test
+	void testeGetLinhaGetColuna() {
+		Campo campo = new Campo(3, 3);
+		
+		assertEquals(3, campo.getLinha());
+		assertEquals(3, campo.getColuna());
+	}
+	
+	@Test
+	void testeObjetivoAlcacadoDesvendado() {
+		Campo campo = new Campo(3, 3);
+		campo.abrir();
+		
+		assertTrue(campo.objetivoAlcancado());	
+	}
+	
+	@Test
+	void testeObjetivoAlcacadoProtegido() {
+		Campo campo = new Campo(3, 3);
+		campo.minar();
+		campo.alternarMarcacao();
+		
+		assertTrue(campo.objetivoAlcancado());	
+	}
+	
+	@Test
+	void testeMinasVizinhanca() {
+		Campo campo33 = new Campo(3, 3);
+		Campo campo22 = new Campo(2, 2);
+		Campo campo23 = new Campo(2, 3);
+		Campo campo32 = new Campo(3, 2);
+		
+		campo33.adicionarVizinho(campo22);
+		campo33.adicionarVizinho(campo23);
+		campo33.adicionarVizinho(campo32);
+		campo22.minar();
+		campo23.minar();
+		campo32.alternarMarcacao();
+		
+		assertEquals(2, campo33.minasVizinhanca());
+	
+	}
+	
+	@Test
+	void testeReiniciar() {
+		Campo campo33 = new Campo(3, 3);
+		
+		campo33.abrir();
+		campo33.minar();
+		campo33.alternarMarcacao();
+		 
+		campo33.reiniciar();
+		
+		assertFalse(campo33.isAberto());
+		assertFalse(campo33.isMinado());
+		assertFalse(campo33.isMarcado());
+	}
+	
+	@Test
+	void testeToStringMarcado() {
+		Campo campo33 = new Campo(3, 3);
+		
+		campo33.alternarMarcacao();
+		
+		assertEquals("X", campo33.toString());	
+	}
+	
+	@Test
+	void testeToStringAbertoEMinado() {
+	    Campo campo33 = new Campo(3, 3);
+
+	    campo33.minar();
+
+	    assertThrows(ExplosaoException.class, () -> campo33.abrir());
+
+	    assertTrue(campo33.isAberto());
+	    assertEquals("*", campo33.toString());
+	}
+	
+	@Test
+	void testeToStringAbertoMinasVizinhanca() {
+		Campo campo33 = new Campo(3, 3);
+		Campo campo22 = new Campo(2, 2);
+		Campo campo23 = new Campo(2, 3);
+		Campo campo32 = new Campo(3, 2);
+		
+		campo33.adicionarVizinho(campo22);
+		campo33.adicionarVizinho(campo23);
+		campo33.adicionarVizinho(campo32);
+		campo22.minar();
+		campo23.minar();
+		campo32.alternarMarcacao();
+		
+		campo33.abrir();	
+		assertEquals("2", campo33.toString());
+	}
+	
+	@Test
+	void testeToStringAbertoOufechado() {
+		Campo campo33 = new Campo(3, 3);
+		Campo campo22 = new Campo(2, 2);
+		
+		campo33.abrir();
+		
+		assertEquals("", campo33.toString());	
+		assertEquals("?", campo22.toString());	
+	}
 }
