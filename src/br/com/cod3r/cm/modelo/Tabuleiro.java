@@ -3,6 +3,8 @@ package br.com.cod3r.cm.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.cod3r.cm.excecao.ExplosaoException;
+
 public class Tabuleiro {
 
 	private int linhas;
@@ -23,10 +25,18 @@ public class Tabuleiro {
 	}
 	
 	public void abrir(int linha, int coluna) {
-		campos.stream()
-		.filter(c -> c.getLinha() == linha && c.getColuna()== coluna)
-		.findFirst()
-		.ifPresent(c -> c.abrir());
+		try {
+			campos.stream()
+			.filter(c -> c.getLinha() == linha && c.getColuna()== coluna)
+			.findFirst()
+			.ifPresent(c -> c.abrir());
+		}
+		catch(ExplosaoException e){
+			campos.forEach(c -> c.setAberto(true));
+			throw e;
+			
+		}
+		
 	}
 	
 	public void alternarMarcacao(int linha, int coluna) {
@@ -97,9 +107,19 @@ public class Tabuleiro {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
-		int i = 0; //indice do tabuleiro
+		sb.append("  ");
+		for(int c = 0; c< colunas; c++) {
+			sb.append(" ");
+			sb.append(c);
+			sb.append(" ");
+		}
 		
-		for(int l = 0; l<linhas; l++) {//percorre as linhas 
+		sb.append("\n");
+		
+		int i = 0; //indice do tabuleiro
+		for(int l = 0; l<linhas; l++) {//percorre as linhas
+			sb.append(l);
+			sb.append(" ");
 			for(int c = 0; c<colunas ; c++) {//percorre as colunas
 				sb.append(" ");
 				sb.append(campos.get(i));//escreve o que é naquele campo referente ao indice sorteado

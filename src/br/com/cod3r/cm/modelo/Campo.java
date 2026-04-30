@@ -83,6 +83,10 @@ public class Campo {
 	public boolean isAberto() {//metodo get para boolean é is
 		return aberto;
 	}
+	
+	public void setAberto(boolean aberto) {
+		this.aberto = aberto;
+	}
 
 	public boolean isFechado() {
 		return !aberto;
@@ -120,7 +124,7 @@ public class Campo {
 		}else if (aberto && minasVizinhanca() > 0) {
 			return Long.toString(minasVizinhanca());
 		}else if (aberto) {
-			return "";
+			return " ";
 		}else {
 			return "?";
 		}

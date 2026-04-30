@@ -22,10 +22,11 @@ public class TabuleiroConsole {
 	private void executarJogo() {
 		try {
 			boolean continuar = true;
-			cicloDoJogo();
 			
 			while(continuar) {
-				System.out.println("Outra partida? (S/n)");
+				cicloDoJogo();
+				
+				System.out.print("Outra partida? (S/n):");
 				String resposta = entrada.nextLine();
 				
 				if("n".equalsIgnoreCase(resposta)) {
@@ -66,7 +67,10 @@ public class TabuleiroConsole {
 			
 		System.out.println("Você ganhou!!!!! ");
 		}catch(ExplosaoException e) {
+			System.out.println(tabuleiro);
 			System.out.println("Você perdeu!!!! ");
+		}catch(SairException e) {
+			System.out.println("Usuário saiu do jogo!! :(");
 		}
 		
 	}
